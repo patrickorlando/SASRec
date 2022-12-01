@@ -28,9 +28,10 @@ parser.add_argument('--dropout_rate', default=0.5, type=float)
 parser.add_argument('--l2_emb', default=0.0, type=float)
 
 args = parser.parse_args()
-if not os.path.isdir(args.dataset + '_' + args.train_dir):
-    os.makedirs(args.dataset + '_' + args.train_dir)
-with open(os.path.join(args.dataset + '_' + args.train_dir, 'args.txt'), 'w') as f:
+run_dir = os.path.join("runs", args.dataset, args.train_dir)
+if not os.path.isdir(run_dir):
+    os.makedirs(run_dir)
+with open(os.path.join(run_dir, 'args.txt'), 'w') as f:
     f.write('\n'.join([str(k) + ',' + str(v) for k, v in sorted(vars(args).items(), key=lambda x: x[0])]))
 f.close()
 
@@ -42,7 +43,7 @@ for u in user_train:
     cc += len(user_train[u])
 print 'average sequence length: %.2f' % (cc / len(user_train))
 
-f = open(os.path.join(args.dataset + '_' + args.train_dir, 'log.txt'), 'w')
+f = open(os.path.join(run_dir, 'log.txt'), 'w')
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
